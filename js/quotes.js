@@ -86,10 +86,21 @@ const quotes = [
 ];
 
 
-const quote = document.querySelector("#quote span:first-child");
-const author = document.querySelector("#quote span:last-child");
+function getRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    return quotes[randomIndex];
+}
 
-const todaysQuote = quotes[Math.floor(Math.random() * quotes.length)];
+function displayQuote() {
+    const { quote, author } = getRandomQuote();
+    const quoteElement = document.querySelector('.quote');
+    const authorElement = document.querySelector('.author');
+    quoteElement.textContent = quote;
+    authorElement.textContent = `- ${author}`;
+}
 
-quote.innerText = todaysQuote.quote;
-author.innerText = todaysQuote.author;
+const changeQuoteBtn = document.querySelector('.change-quote');
+changeQuoteBtn.addEventListener('click', displayQuote);
+
+// display a random quote on page load
+displayQuote();
