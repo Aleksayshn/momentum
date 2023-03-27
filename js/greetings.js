@@ -1,28 +1,19 @@
-const loginForm = document.querySelector("#login-form");
-const loginInput = document.querySelector("#login-form input");
-const greeting = document.querySelector("#greeting");
+function setGreeting() {
+    const hour = new Date().getHours();
+    let greeting;
 
-const HIDDEN_CLASSNAME = "hidden";
-const USERNAME_KEY = "username";
+    if (hour >= 6 && hour < 12) {
+        greeting = 'Good morning';
+    } else if (hour >= 12 && hour < 18) {
+        greeting = 'Good afternoon';
+    } else if (hour >= 18 && hour <= 23) {
+        greeting = 'Good evening';
+    } else {
+        greeting = 'Good night';
+    }
 
-function onLoginSubmit(event){
-    event.preventDefault();
-    loginForm.classList.add(HIDDEN_CLASSNAME);
-    const username = loginInput.value;
-    localStorage.setItem(USERNAME_KEY, username);
-    paintGreetings(username);
+    const greetingElement = document.querySelector('.greeting');
+    greetingElement.textContent = `${greeting}, `;
 }
 
-function paintGreetings(username){
-    greeting.innerText = `Hello, ${username}`;
-    greeting.classList.remove(HIDDEN_CLASSNAME);
-}
-
-const savedUsername = localStorage.getItem(USERNAME_KEY);
-
-if(savedUsername === null){
-    loginForm.classList.remove(HIDDEN_CLASSNAME);
-    loginForm.addEventListener("submit",onLoginSubmit);
-} else {
-    paintGreetings(savedUsername);
-}
+setGreeting();

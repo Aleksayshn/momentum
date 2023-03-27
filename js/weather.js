@@ -1,21 +1,29 @@
-const API_KEY = "0be2f24b7f28e953baabe8f688d953aa";
 
-function onGeoOk(position){
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+function getWeather() {
+    const city = document.querySelector(".city").value;
+    const apiKey = "d7b860f9ccc3d1142dfcfc9ca81c3552";
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
     fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        const weather = document.querySelector("#weather span:last-child");
-        const city = document.querySelector("#weather span:first-child");
-        city.innerText = data.name;
-        weather.innerText = `${data.weather[0].main} ${Math.round(data.main.temp)}℃`;
-    });
-}
-function onGeoError(){
-    alert("Can't find you. No weather for you.");
-}
+        .then(response => response.json())
+        .then(data => {
+            const weatherIcon = document.querySelector(".weather-icon");
+            weatherIcon.classList.add(`owf-${data.weather[0].id}`);
 
-navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
+            const temperature = document.querySelector(".temperature");
+            temperature.innerHTML = `${Math.round(data.main.temp)}°C`;
+
+            const weatherDescription = document.querySelector(".weather-description");
+            weatherDescription.innerHTML = data.weather[0].description;
+
+            const wind = document.querySelector(".wind");
+            wind.innerHTML = `Wind: ${data.wind.speed} m/s`;
+
+            const humidity = document.querySelector(".humidity");
+            humidity.innerHTML = `Humidity: ${data.main.humidity}%`;
+        })
+        .catch(error => {
+            const weatherError = document.querySelector(".weather-error");
+            weatherError.innerHTML = `Error: ${error.message}`;
+        });
+}
